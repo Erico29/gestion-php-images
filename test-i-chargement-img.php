@@ -8,6 +8,17 @@ $message .= '<p><strong>File error :</strong> ' . $_FILES['userfile']['error'] .
 
 $message .= '<p><strong>Titre :</strong> ' . $_POST['titre'] . ' <em>//Titre récupéré.</em></p>';
 $message .= '<p><strong>Description :</strong> ' . $_POST['description'] . ' <em>//Description récupérée.</em></p>';
+
+// Message d'erreur éventuelle
+$message_erreur = "";
+$taille_max = 51200; // 50 octets
+if ($_FILES['userfile']['size'] > $taille_max) 
+    $message_erreur .= "Le fichier est trop lourd (50 ko maximum)<br/>";
+
+if ($_FILES['userfile']['error'])
+    $message_erreur .= "Erreur(s) de fichier : ".$_FILES['userfile']['error'];
+// On peut également vérifier l'extension et la taille maximum du fichier 
+// Lire : http://www.siteduzero.com/informatique/tutoriels/upload-de-fichiers-par-formulaire/recuperer-le-fichier
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -26,7 +37,6 @@ $message .= '<p><strong>Description :</strong> ' . $_POST['description'] . ' <em
     <body>
         <h1>Mon formulaire test</h1>
         <form action="test-i-chargement-img.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="MAX_FILE_SIZE" value="5242880"> 
             <input type="file" name="userfile"><br/>
             <br/>
             <input type="text" name="titre" value="Titre du fichier"><br/>
@@ -40,6 +50,14 @@ $message .= '<p><strong>Description :</strong> ' . $_POST['description'] . ' <em
             <h2>Retour valeurs :</h2>
             <?php
             echo $message;
+            ?>
+        </div>
+        <br/>
+        <br/>
+        <div style="border: 1px solid red; padding: 10px;">
+            <h2>Message d'erreur éventuelle</h2>
+            <?php
+            echo $message_erreur;
             ?>
         </div>
 
